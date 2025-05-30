@@ -14,7 +14,7 @@ public class HelpRequest extends PanacheEntity {
     @Column(nullable = false)
     private double longitude;
 
-    @Column(name= "timeStamp" , nullable = false)
+    @Column(name = "timeStamp", nullable = false)
     private LocalDateTime requestTimestamp;
 
     @Enumerated(EnumType.STRING)
@@ -23,6 +23,9 @@ public class HelpRequest extends PanacheEntity {
 
     @Lob //Lob is used for huge text fields
     private String notes;
+
+    @Column(name = "endereco_aproximado")
+    private String enderecoAproximado;
 
 
     //Here we define the contact information
@@ -34,17 +37,20 @@ public class HelpRequest extends PanacheEntity {
     public HelpRequest() {
     }
 
-    public HelpRequest(double latitude, double longitude, LocalDateTime requestTimestamp, Status status, String notes, String contactInfo) {
+    public HelpRequest(double latitude, double longitude,
+                       LocalDateTime requestTimestamp, Status status,
+                       String notes, String enderecoAproximado, String contactInfo) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.requestTimestamp = requestTimestamp;
         this.status = status;
         this.notes = notes;
+        this.enderecoAproximado = enderecoAproximado;
         this.contactInfo = contactInfo;
     }
 
     public String getGoogleMapsLink() {
-        if (this.latitude != 0 || this.longitude != 0) { // Evita link para 0,0 se não definido
+        if (this.latitude != 0 || this.longitude != 0) {
             return String.format("https://www.google.com/maps?q=%f,%f", this.latitude, this.longitude);
 
         }
@@ -91,6 +97,14 @@ public class HelpRequest extends PanacheEntity {
         this.notes = notes;
     }
 
+    public String getEnderecoAproximado() {
+        return enderecoAproximado;
+    }
+
+    public void setEnderecoAproximado(String enderecoAproximado) {
+        this.enderecoAproximado = enderecoAproximado;
+    }
+
     public String getContactInfo() {
         return contactInfo;
     }
@@ -98,6 +112,4 @@ public class HelpRequest extends PanacheEntity {
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
     }
-
-
 }
