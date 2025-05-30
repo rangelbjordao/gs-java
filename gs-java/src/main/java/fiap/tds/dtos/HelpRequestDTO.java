@@ -5,13 +5,13 @@ public class HelpRequestDTO {
     private double latitude;
     private double longitude;
     private String notes;
-    private String coontactInfo;
+    private String contactInfo;
 
-    public HelpRequestDTO(double latitude, double longitude, String notes, String coontactInfo) {
+    public HelpRequestDTO(double latitude, double longitude, String notes, String contactInfo) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.notes = notes;
-        this.coontactInfo = coontactInfo;
+        this.contactInfo = contactInfo;
     }
 
 
@@ -39,11 +39,11 @@ public class HelpRequestDTO {
         this.notes = notes;
     }
 
-    public String getCoontactInfo() {
-        return coontactInfo;
+    public String getContactInfo() {
+        return contactInfo;
     }
 
-    public void setCoontactInfo(String coontactInfo) {
-        this.coontactInfo = coontactInfo;
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 }

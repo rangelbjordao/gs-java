@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "HelpRequest")
+@Table(name = "Help_Request")
 public class HelpRequest extends PanacheEntity {
     @Column(nullable = false)
     private double latitude;
