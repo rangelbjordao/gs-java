@@ -1,0 +1,22 @@
+package fiap.tds.services;
+
+import fiap.tds.dtos.UsersDTO;
+import fiap.tds.repositories.UsersRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
+public class UsersService {
+    @Inject
+    UsersRepository usersRepository;
+
+    public boolean login(String username, String password) {
+        var user = usersRepository.findByUsername(username);
+        if (user.isPresent()) {
+            return user.get().getPassword().equals(password);
+        } else {
+            return false;
+        }
+
+    }
+}

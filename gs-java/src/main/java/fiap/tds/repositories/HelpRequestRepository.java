@@ -56,8 +56,8 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
     }
 
     private HelpRequest insert(HelpRequest entity) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SQL_INSERT, new String[]{"ID"})) {
+        try (var connection = dataSource.getConnection();
+             var ps = connection.prepareStatement(SQL_INSERT, new String[]{"ID"})) {
             ps.setString(1, entity.getCep());
             ps.setDouble(2, entity.getLatitude());
             ps.setDouble(3, entity.getLongitude());
@@ -83,16 +83,14 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
             return entity;
 
         } catch (SQLException e) {
-            // Em um app real, logar e/ou lançar uma exceção customizada não checada
-            // throw new DataAccessException("Erro ao inserir HelpRequest", e);
-            e.printStackTrace(); // Apenas para depuração inicial
+            e.printStackTrace();
             throw new RuntimeException("Erro ao inserir HelpRequest: " + e.getMessage(), e);
         }
     }
 
     private HelpRequest update(HelpRequest entity) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SQL_UPDATE)) {
+        try (var connection = dataSource.getConnection();
+             var ps = connection.prepareStatement(SQL_UPDATE)) {
 
             ps.setString(1, entity.getCep());
             ps.setDouble(2, entity.getLatitude());
@@ -102,7 +100,7 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
             ps.setString(6, entity.getNotes());
             ps.setString(7, entity.getContactInfo());
             ps.setString(8, entity.getEnderecoAproximado());
-            ps.setLong(9, entity.getId()); // ID para a cláusula WHERE
+            ps.setLong(9, entity.getId());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -119,8 +117,8 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
 
     @Override
     public Optional<HelpRequest> findById(Long id) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SQL_FIND_BY_ID)) {
+        try (var connection = dataSource.getConnection();
+             var ps = connection.prepareStatement(SQL_FIND_BY_ID)) {
 
             ps.setLong(1, id);
 
@@ -139,8 +137,8 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
     @Override
     public List<HelpRequest> findAll() {
         List<HelpRequest> requests = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SQL_FIND_ALL);
+        try (var connection = dataSource.getConnection();
+             var ps = connection.prepareStatement(SQL_FIND_ALL);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
