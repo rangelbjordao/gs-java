@@ -1,45 +1,30 @@
 package fiap.tds.models;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Entity
-@Table(name = "Help_Request")
-public class HelpRequest extends PanacheEntity {
-    @Column(nullable = false)
+
+public class HelpRequest {
+
+    private Long id;
+    private String cep;
     private double latitude;
-
-    @Column(nullable = false)
     private double longitude;
-
-    @Column(name = "timeStamp", nullable = false)
     private LocalDateTime requestTimestamp;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
-
-    @Lob //Lob is used for huge text fields
+    private Status status; //
     private String notes;
-
-    @Column(name = "endereco_aproximado")
     private String enderecoAproximado;
-
-
-    //Here we define the contact information
-    // for the person requesting help.
-    // It can be a phone number, email, or any other relevant contact detail.
-    @Column(name= "contact_info")
     private String contactInfo;
+
 
     public HelpRequest() {
     }
 
-    public HelpRequest(double latitude, double longitude,
-                       LocalDateTime requestTimestamp, Status status,
-                       String notes, String enderecoAproximado, String contactInfo) {
+
+    public HelpRequest(Long id, String cep, double latitude, double longitude, LocalDateTime requestTimestamp,
+                       Status status, String notes, String enderecoAproximado, String contactInfo) {
+        this.id = id;
+        this.cep = cep;
         this.latitude = latitude;
         this.longitude = longitude;
         this.requestTimestamp = requestTimestamp;
@@ -49,12 +34,22 @@ public class HelpRequest extends PanacheEntity {
         this.contactInfo = contactInfo;
     }
 
-    public String getGoogleMapsLink() {
-        if (this.latitude != 0 || this.longitude != 0) {
-            return String.format("https://www.google.com/maps?q=%f,%f", this.latitude, this.longitude);
 
-        }
-        return null;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public double getLatitude() {
@@ -111,5 +106,29 @@ public class HelpRequest extends PanacheEntity {
 
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        HelpRequest that = (HelpRequest) o;
+        return Double.compare(getLatitude(), that.getLatitude()) == 0 && Double.compare(getLongitude(), that.getLongitude()) == 0 && Objects.equals(getId(), that.getId()) && Objects.equals(getCep(), that.getCep()) && Objects.equals(getRequestTimestamp(), that.getRequestTimestamp()) && getStatus() == that.getStatus() && Objects.equals(getNotes(), that.getNotes()) && Objects.equals(getEnderecoAproximado(), that.getEnderecoAproximado()) && Objects.equals(getContactInfo(), that.getContactInfo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getCep(), getLatitude(), getLongitude(), getRequestTimestamp(), getStatus(), getNotes(), getEnderecoAproximado(), getContactInfo());
+    }
+
+    @Override
+    public String toString() {
+        return "HelpRequest{" +
+                "id=" + id +
+                ", cep='" + cep + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                // ... outros campos
+                '}';
     }
 }

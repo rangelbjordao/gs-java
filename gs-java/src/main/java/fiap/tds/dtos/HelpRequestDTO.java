@@ -2,33 +2,25 @@ package fiap.tds.dtos;
 
 // This class will be used for the client to send help requests
 public class HelpRequestDTO {
-    private double latitude;
-    private double longitude;
+    private String cep;
     private String notes;
     private String contactInfo;
 
-    public HelpRequestDTO(double latitude, double longitude, String notes, String contactInfo) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public HelpRequestDTO() {
+    }
+
+    public HelpRequestDTO(String cep, String notes, String contactInfo) {
+        this.cep = cep;
         this.notes = notes;
         this.contactInfo = contactInfo;
     }
 
-
-    public double getLatitude() {
-        return latitude;
+    public String getCep() {
+        return cep;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public String getNotes() {
