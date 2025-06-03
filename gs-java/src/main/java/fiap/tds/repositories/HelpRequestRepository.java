@@ -17,7 +17,11 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
     @Inject
     DataSource dataSource;
 
-    private static final String SQL_INSERT = "INSERT INTO HELP_REQUEST (ID, NOTES, CONTACT_INFO, REQUEST_TIMESTAMP, STATUS, LATITUDE, LONGITUDE, ENDERECO_APROXIMADO) VALUES (SEQ_HELP_REQUEST.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT = """
+    INSERT INTO HELP_REQUEST 
+    (CEP, LATITUDE, LONGITUDE, REQUEST_TIMESTAMP, STATUS, NOTES, CONTACT_INFO, ENDERECO_APROXIMADO)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+""";
 
     private static final String SQL_UPDATE = "UPDATE HELP_REQUEST SET NOTES = ?, CONTACT_INFO = ?, REQUEST_TIMESTAMP = ?, STATUS = ?, LATITUDE = ?, LONGITUDE = ?, ENDERECO_APROXIMADO = ? WHERE ID = ?";
 
@@ -53,13 +57,12 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
 
     private HelpRequest insert(HelpRequest entity) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SQL_INSERT, new String[]{"ID"})) { // Ou Statement.RETURN_GENERATED_KEYS
-
+             PreparedStatement ps = connection.prepareStatement(SQL_INSERT, new String[]{"ID"})) {
             ps.setString(1, entity.getCep());
             ps.setDouble(2, entity.getLatitude());
             ps.setDouble(3, entity.getLongitude());
             ps.setTimestamp(4, entity.getRequestTimestamp() != null ? Timestamp.valueOf(entity.getRequestTimestamp()) : null);
-            ps.setString(5, entity.getStatus() != null ? entity.getStatus().name() : null); // Enum para String
+            ps.setString(5, entity.getStatus() != null ? entity.getStatus().name() : null);
             ps.setString(6, entity.getNotes());
             ps.setString(7, entity.getContactInfo());
             ps.setString(8, entity.getEnderecoAproximado());
@@ -181,5 +184,13 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
             throw new RuntimeException("Erro ao contar HelpRequests: " + e.getMessage(), e);
         }
         return 0;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

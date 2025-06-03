@@ -41,18 +41,19 @@ public class HelpRequestService {
             List<NominatimSearchResponseDTO> results = nominatimClient.searchByQuery(
                     "json",
                     helpDto.getCep(),
-                    "br", // Filtro para o Brasil
+                    "br",
                     1,
                     "pt-BR",
                     appUserAgent
             );
 
             if (results != null && !results.isEmpty()) {
-                NominatimSearchResponseDTO location = results.get(0);
+                NominatimSearchResponseDTO location = results.getFirst();
 
                 help.setLatitude(Double.parseDouble(location.lat));
                 help.setLongitude(Double.parseDouble(location.lon));
                 help.setEnderecoAproximado(location.display_name);
+                help.setCep(helpDto.getCep());
             } else {
                 System.err.println("Nominatim: Nenhuma coordenada encontrada para o CEP fornecido.");
             }
@@ -71,7 +72,7 @@ public class HelpRequestService {
             throw new IllegalArgumentException("O ID não pode ser nulo.");
         }
         var helpRequest = helpRequestRepository.findById(id);
-        if (helpRequest == null) {
+        if (helpRequest.isEmpty()) {
             throw new NotFoundException("Nenhum objeto foi encontrado com o id: " + id);
         }
         return null;
