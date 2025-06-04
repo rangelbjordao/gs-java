@@ -20,23 +20,4 @@ public class HelpRequestResource {
         var helpRequest = helpRequestService.reportHelpRequest(helpDto);
         return Response.status(Response.Status.CREATED).entity(helpRequest).build();
     }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}")
-    public Response getHelpById(@PathParam("id") Long id) {
-        var helpId = helpRequestService.findHelpById(id);
-        return Response.ok(helpId).build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllHelpRequests() {
-        var helpList = helpRequestService.getAllHelpRequests();
-        if (helpList == null || helpList.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Nenhuma solicitação de ajuda encontrada.").build();
-        }
-        return Response.ok(helpList).build();
-
-    }
 }

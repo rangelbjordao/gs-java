@@ -36,6 +36,7 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
     private HelpRequest mapRowToHelpRequest(ResultSet rs) throws SQLException {
         HelpRequest helpRequest = new HelpRequest();
         helpRequest.setId(rs.getLong("ID"));
+        helpRequest.setCep(rs.getString("CEP"));
         helpRequest.setNotes(rs.getString("NOTES"));
         helpRequest.setContactInfo(rs.getString("CONTACT_INFO"));
         helpRequest.setRequestTimestamp(rs.getTimestamp("REQUEST_TIMESTAMP").toLocalDateTime());

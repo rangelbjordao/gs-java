@@ -66,25 +66,42 @@ public class HelpRequestService {
     }
 
 
+    public void resolveHelpRequest(Long id) {
+        var help = helpRequestRepository.findById(id);
+        if(help.isEmpty() || help.get().getStatus().equals(Status.CONCLUIDO)) {
+            throw new NotFoundException("Solicitação de ajuda não encontrada ou já concluída.");
+        }
+        var helpRequest = help.get();
+        if(helpRequest.getStatus().equals(Status.PENDENTE)) {
+            helpRequest.setStatus(Status.EM_ANDAMENTO);
+        } else if (helpRequest.getStatus().equals(Status.EM_ANDAMENTO)) {
+            helpRequest.setStatus(Status.CONCLUIDO);
+        }
+        helpRequestRepository.save(helpRequest);
+    }
+
+
+
 
     public HelpRequest findHelpById(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("O ID não pode ser nulo.");
-        }
         var helpRequest = helpRequestRepository.findById(id);
         if (helpRequest.isEmpty()) {
             throw new NotFoundException("Nenhum objeto foi encontrado com o id: " + id);
         }
-        return null;
+        return helpRequest.get();
     }
 
-    // This method will return all help requests, GET request maybe it will exclusively for admins.
+    // This method will return all help requests, GET request maybe will exclusively for admins.
     public List<HelpRequest> getAllHelpRequests() {
-        var helpList = helpRequestRepository.findAll();
-        if (helpList == null || helpList.isEmpty()) {
+        var helpRequests = helpRequestRepository.findAll();
+        if(!helpRequests.isEmpty()) {
+            return helpRequests.stream()
+                    .filter(h -> h.getStatus().equals(Status.PENDENTE) || h.getStatus().equals(Status.EM_ANDAMENTO))
+                    .toList();
+        }
+        else{
             throw new NotFoundException("Nenhuma solicitação de ajuda encontrada.");
         }
-        return helpList;
     }
 
 }

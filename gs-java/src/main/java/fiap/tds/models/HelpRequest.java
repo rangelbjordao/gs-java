@@ -108,27 +108,4 @@ public class HelpRequest {
         this.contactInfo = contactInfo;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        HelpRequest that = (HelpRequest) o;
-        return Double.compare(getLatitude(), that.getLatitude()) == 0 && Double.compare(getLongitude(), that.getLongitude()) == 0 && Objects.equals(getId(), that.getId()) && Objects.equals(getCep(), that.getCep()) && Objects.equals(getRequestTimestamp(), that.getRequestTimestamp()) && getStatus() == that.getStatus() && Objects.equals(getNotes(), that.getNotes()) && Objects.equals(getEnderecoAproximado(), that.getEnderecoAproximado()) && Objects.equals(getContactInfo(), that.getContactInfo());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getCep(), getLatitude(), getLongitude(), getRequestTimestamp(), getStatus(), getNotes(), getEnderecoAproximado(), getContactInfo());
-    }
-
-    @Override
-    public String toString() {
-        return "HelpRequest{" +
-                "id=" + id +
-                ", cep='" + cep + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                // ... outros campos
-                '}';
-    }
 }
