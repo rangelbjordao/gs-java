@@ -15,14 +15,15 @@ public class HelpRequest {
     private String notes;
     private String enderecoAproximado;
     private String contactInfo;
+    private Long updateBy;
+
 
 
     public HelpRequest() {
     }
 
 
-    public HelpRequest(Long id, String cep, double latitude, double longitude, LocalDateTime requestTimestamp,
-                       Status status, String notes, String enderecoAproximado, String contactInfo) {
+    public HelpRequest(Long id, String cep, double latitude, double longitude, LocalDateTime requestTimestamp, Status status, String notes, String enderecoAproximado, String contactInfo, Long updateBy) {
         this.id = id;
         this.cep = cep;
         this.latitude = latitude;
@@ -32,9 +33,8 @@ public class HelpRequest {
         this.notes = notes;
         this.enderecoAproximado = enderecoAproximado;
         this.contactInfo = contactInfo;
+        this.updateBy = updateBy;
     }
-
-
 
     public Long getId() {
         return id;
@@ -108,4 +108,11 @@ public class HelpRequest {
         this.contactInfo = contactInfo;
     }
 
+    public Long getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(Long updateBy) {
+        this.updateBy = updateBy;
+    }
 }

@@ -1,6 +1,7 @@
 package fiap.tds.services;
 
 import fiap.tds.dtos.UsersDTO;
+import fiap.tds.models.Users;
 import fiap.tds.repositories.UsersRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -19,4 +20,15 @@ public class UsersService {
         }
 
     }
+
+
+    public void register (UsersDTO usersDTO) {
+        var user = new Users();
+        user.setUsername(usersDTO.getUsername());
+        user.setPassword(usersDTO.getPassword());
+        usersRepository.save(user);
+    }
+
+
+
 }

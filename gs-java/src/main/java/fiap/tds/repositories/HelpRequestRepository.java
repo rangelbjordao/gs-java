@@ -38,6 +38,8 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
         helpRequest.setId(rs.getLong("ID"));
         helpRequest.setCep(rs.getString("CEP"));
         helpRequest.setNotes(rs.getString("NOTES"));
+        //Esse updateBy tem que pegar o id do usuario que reportou a ajuda.
+        helpRequest.setUpdateBy(rs.getLong(("UPDATE_BY")));
         helpRequest.setContactInfo(rs.getString("CONTACT_INFO"));
         helpRequest.setRequestTimestamp(rs.getTimestamp("REQUEST_TIMESTAMP").toLocalDateTime());
         helpRequest.setStatus(Status.valueOf(rs.getString("STATUS")));
@@ -67,6 +69,8 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
             ps.setString(6, entity.getNotes());
             ps.setString(7, entity.getContactInfo());
             ps.setString(8, entity.getEnderecoAproximado());
+            // Adicionado hoje, !!!TESTAR!!!
+            ps.setLong(9, entity.getUpdateBy() != null ? entity.getUpdateBy() : 0L);
 
             int affectedRows = ps.executeUpdate();
 
