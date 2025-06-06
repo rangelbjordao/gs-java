@@ -1,4 +1,4 @@
-package fiap.tds.repositories;
+package fiap.tds.resources;
 
 import fiap.tds.dtos.LoginDTO;
 import fiap.tds.services.UsersService;

@@ -40,7 +40,8 @@ public class ChatResource {
         Map<String, Object> body = new HashMap<>();
         String prompt = """
             Você é um assistente empático, que ajuda pessoas afetadas por desastres naturais.
-            Responda de forma calma, curta e clara em português, dando suporte psicológico e dicas práticas.
+            Responda de forma calma, curta e clara e fale em português atual, 
+            dando suporte psicológico e dicas práticas que ajude o individuo.
             Usuário: %s
             Assistente:
             """.formatted(message);
