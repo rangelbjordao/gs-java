@@ -19,11 +19,11 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
 
     private static final String SQL_INSERT = """
     INSERT INTO HELP_REQUEST 
-    (CEP, LATITUDE, LONGITUDE, REQUEST_TIMESTAMP, STATUS, NOTES, CONTACT_INFO, ENDERECO_APROXIMADO)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    (CEP, LATITUDE, LONGITUDE, REQUEST_TIMESTAMP, STATUS, NOTES, CONTACT_INFO, ENDERECO_APROXIMADO, UPDATE_BY, USER_ID)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?)
 """;
 
-    private static final String SQL_UPDATE = "UPDATE HELP_REQUEST SET NOTES = ?, CONTACT_INFO = ?, REQUEST_TIMESTAMP = ?, STATUS = ?, LATITUDE = ?, LONGITUDE = ?, ENDERECO_APROXIMADO = ? WHERE ID = ?";
+    private static final String SQL_UPDATE = "UPDATE HELP_REQUEST SET NOTES = ?, CONTACT_INFO = ?, REQUEST_TIMESTAMP = ?, STATUS = ?, LATITUDE = ?, LONGITUDE = ?, ENDERECO_APROXIMADO = ?, UPDATE_BY = ?, USER_ID = ? WHERE ID = ?";
 
     private static final String SQL_FIND_BY_ID = "SELECT * FROM HELP_REQUEST WHERE ID = ?";
 
@@ -40,6 +40,7 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
         helpRequest.setNotes(rs.getString("NOTES"));
         //Esse updateBy tem que pegar o id do usuario que reportou a ajuda.
         helpRequest.setUpdateBy(rs.getLong(("UPDATE_BY")));
+        helpRequest.setUserId(rs.getLong(("USER_ID")));
         helpRequest.setContactInfo(rs.getString("CONTACT_INFO"));
         helpRequest.setRequestTimestamp(rs.getTimestamp("REQUEST_TIMESTAMP").toLocalDateTime());
         helpRequest.setStatus(Status.valueOf(rs.getString("STATUS")));
@@ -70,7 +71,8 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
             ps.setString(7, entity.getContactInfo());
             ps.setString(8, entity.getEnderecoAproximado());
             // Adicionado hoje, !!!TESTAR!!!
-            ps.setLong(9, entity.getUpdateBy() != null ? entity.getUpdateBy() : 0L);
+            ps.setLong(9, entity.getUpdateBy() != null ? entity.getUpdateBy() : 1L);
+            ps.setLong(10, entity.getUserId());
 
             int affectedRows = ps.executeUpdate();
 
@@ -97,15 +99,16 @@ public class HelpRequestRepository implements CrudRepository<HelpRequest, Long> 
         try (var connection = dataSource.getConnection();
              var ps = connection.prepareStatement(SQL_UPDATE)) {
 
-            ps.setString(1, entity.getCep());
-            ps.setDouble(2, entity.getLatitude());
-            ps.setDouble(3, entity.getLongitude());
-            ps.setTimestamp(4, entity.getRequestTimestamp() != null ? Timestamp.valueOf(entity.getRequestTimestamp()) : null);
-            ps.setString(5, entity.getStatus() != null ? entity.getStatus().name() : null);
-            ps.setString(6, entity.getNotes());
-            ps.setString(7, entity.getContactInfo());
-            ps.setString(8, entity.getEnderecoAproximado());
-            ps.setLong(9, entity.getId());
+            ps.setString(1, entity.getNotes());
+            ps.setString(2, entity.getContactInfo());
+            ps.setTimestamp(3, entity.getRequestTimestamp() != null ? Timestamp.valueOf(entity.getRequestTimestamp()) : null);
+            ps.setString(4, entity.getStatus() != null ? entity.getStatus().name() : null);
+            ps.setDouble(5, entity.getLatitude());
+            ps.setDouble(6, entity.getLongitude());
+            ps.setString(7, entity.getEnderecoAproximado());
+            ps.setLong(8, entity.getUpdateBy() != null ? entity.getUpdateBy() : 1L);
+            ps.setLong(9, entity.getUserId());
+            ps.setLong(10, entity.getId());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {

@@ -27,6 +27,7 @@ public class HelpRequestService {
     NominatimClient nominatimClient;
 
     private final String appUserAgent = "MeuAppSOS-FIAP/1.0 (rm561160@fiap.com.br)";
+    private static final Long SYSTEM_USER_ID = 1L;
 
     // This another way to implement the method, returns the entity created, and show the id etc.
     @Transactional
@@ -54,6 +55,8 @@ public class HelpRequestService {
                 help.setLongitude(Double.parseDouble(location.lon));
                 help.setEnderecoAproximado(location.display_name);
                 help.setCep(helpDto.getCep());
+                help.setUserId(SYSTEM_USER_ID);
+                help.setUpdateBy(SYSTEM_USER_ID);
             } else {
                 System.err.println("Nominatim: Nenhuma coordenada encontrada para o CEP fornecido.");
             }
@@ -68,19 +71,17 @@ public class HelpRequestService {
 
     public void resolveHelpRequest(Long id) {
         var help = helpRequestRepository.findById(id);
-        if(help.isEmpty() || help.get().getStatus().equals(Status.CONCLUIDO)) {
+        if (help.isEmpty() || help.get().getStatus().equals(Status.CONCLUIDO)) {
             throw new NotFoundException("Solicitação de ajuda não encontrada ou já concluída.");
         }
         var helpRequest = help.get();
-        if(helpRequest.getStatus().equals(Status.PENDENTE)) {
+        if (helpRequest.getStatus().equals(Status.PENDENTE)) {
             helpRequest.setStatus(Status.EM_ANDAMENTO);
         } else if (helpRequest.getStatus().equals(Status.EM_ANDAMENTO)) {
             helpRequest.setStatus(Status.CONCLUIDO);
         }
         helpRequestRepository.save(helpRequest);
     }
-
-
 
 
     public HelpRequest findHelpById(Long id) {
@@ -94,12 +95,11 @@ public class HelpRequestService {
     // This method will return all help requests, GET request maybe will exclusively for admins.
     public List<HelpRequest> getAllHelpRequests() {
         var helpRequests = helpRequestRepository.findAll();
-        if(!helpRequests.isEmpty()) {
+        if (!helpRequests.isEmpty()) {
             return helpRequests.stream()
                     .filter(h -> h.getStatus().equals(Status.PENDENTE) || h.getStatus().equals(Status.EM_ANDAMENTO))
                     .toList();
-        }
-        else{
+        } else {
             throw new NotFoundException("Nenhuma solicitação de ajuda encontrada.");
         }
     }

@@ -1,6 +1,7 @@
 package fiap.tds.resources;
 
 import fiap.tds.dtos.HelpRequestDTO;
+import fiap.tds.dtos.HelpRequestResponseDTO;
 import fiap.tds.models.HelpRequest;
 import fiap.tds.services.HelpRequestService;
 import jakarta.inject.Inject;
@@ -23,7 +24,7 @@ public class IncidentResource {
             return Response.status(Response.Status.NO_CONTENT).entity("Nenhum incidente encontrado").build();
         }
         var incidentsFiltered =  incidents.stream()
-                .map(h -> new HelpRequestDTO(h.getCep(), h.getNotes(), h.getContactInfo()))
+                .map(h -> new HelpRequestResponseDTO(h.getCep(), h.getNotes(), h.getContactInfo(), h.getLatitude(), h.getLongitude()))
                 .collect(Collectors.toList());
         return Response.ok(incidentsFiltered).build();
     }
@@ -37,5 +38,18 @@ public class IncidentResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Incidente não encontrado").build();
         }
         return Response.ok(incident).build();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public Response resolveIncident(@PathParam("id") Long id) {
+        try {
+            helpService.resolveHelpRequest(id);
+            return Response.ok("Incidente resolvido com sucesso!").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Não foi possível encontrar o incidente: " + e.getMessage()).build();
+        }
     }
 }

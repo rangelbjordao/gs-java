@@ -6,6 +6,8 @@ import fiap.tds.repositories.UsersRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import java.util.Optional;
+
 @ApplicationScoped
 public class UsersService {
     @Inject
@@ -27,6 +29,14 @@ public class UsersService {
         user.setUsername(usersDTO.getUsername());
         user.setPassword(usersDTO.getPassword());
         usersRepository.save(user);
+    }
+
+    public Optional<Users> findByUsername(String username) {
+        if(!username.isEmpty()){
+            return usersRepository.findByUsername(username);
+        } else {
+            return Optional.empty();
+        }
     }
 
 
