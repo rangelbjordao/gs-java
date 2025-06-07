@@ -23,9 +23,18 @@ public class IncidentResource {
         if (incidents.isEmpty()) {
             return Response.status(Response.Status.NO_CONTENT).entity("Nenhum incidente encontrado").build();
         }
-        var incidentsFiltered =  incidents.stream()
-                .map(h -> new HelpRequestResponseDTO(h.getCep(), h.getNotes(), h.getContactInfo(), h.getLatitude(), h.getLongitude()))
+        var incidentsFiltered = incidents.stream()
+                .map(h -> new HelpRequestResponseDTO(
+                        h.getId(),
+                        h.getCep(),
+                        h.getNotes(),
+                        h.getContactInfo(),
+                        h.getLatitude(),
+                        h.getLongitude(),
+                        h.getStatus().name()
+                ))
                 .collect(Collectors.toList());
+
         return Response.ok(incidentsFiltered).build();
     }
 

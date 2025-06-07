@@ -1,22 +1,32 @@
 package fiap.tds.dtos;
 
 public class HelpRequestResponseDTO {
+    private Long id;
     private String cep;
     private String notes;
     private String contactInfo;
     private double latitude;
     private double longitude;
+    private String status;  // novo campo
 
+    public HelpRequestResponseDTO() {}
 
-    public HelpRequestResponseDTO() {
-    }
-
-    public HelpRequestResponseDTO(String cep, String notes, String contactInfo, double latitude, double longitude) {
+    public HelpRequestResponseDTO(Long id, String cep, String notes, String contactInfo, double latitude, double longitude, String status) {
+        this.id = id;
         this.cep = cep;
         this.notes = notes;
         this.contactInfo = contactInfo;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCep() {
@@ -57,5 +67,13 @@ public class HelpRequestResponseDTO {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
